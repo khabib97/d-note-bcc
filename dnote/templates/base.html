@@ -15,30 +15,34 @@
         {% endblock %}
     </head>
     <body>
-        <div id="header">
-            <h1>Bangladesh Computer Council</h1>
-            <ul id="nav">
-                <li><a href="{{ url_for('index') }}">New Note</a></li>
-                <li><a href="{{ url_for('security') }}">Security</a></li>
-                <li><a href="{{ url_for('faq') }}">FAQ</a></li>
-                <li><a href="{{ url_for('about') }}">About</a></li>
-            </ul>
+        <div id="container">
+            <header style="height: 70px;">
+                <h1 style="color: white;">Bangladesh Computer Council</h1>
+            </header>
+            
+            <div class="topnav">
+                <a href="{{ url_for('index') }}">New Note</a>
+                <a href="{{ url_for('security') }}">Security</a>
+                <a href="{{ url_for('faq') }}">FAQ</a>
+                <a href="{{ url_for('about') }}">About</a>
+            </div>
+            
+            <div id="content">
+                {% block content %}{% endblock %}
+            </div>
+            <footer style="height: 20px; width: 100%">© 2018 BCC, Dhaka, Bangladesh</footer>
+            <noscript>
+            <p>You currently have JavaScript disabled. JavaScript is required to use this website. Here is all the JavaScript code that is executed:</p>
+                <ul>
+                    <li><a href="http://hashcash.org">Hashcash</a>- Hashcash tokens are minted when submitting a note to prevent denial of service POST attacks and to prevent spamming.</li>
+                    <li><a href="https://github.com/Valve/fingerprintjs">Fingerprinting</a>- As part of Hashcash tokens, an anonymous <a href="https://en.wikipedia.org/wiki/MurmurHash">MurmurHash</a> resource string is calculated.</li>
+                    <li><a href="http://davidshimjs.github.io/qrcodejs/">QR Code Generation</a>- A QR Code is generated for sending to the recipient to scan using their mobile device to read the note.</li>
+                    <li>Notifications- When posting a note, JavaScript is used to let you know that while you are posting your note, a Hashcash token is being minted.</li>
+                    <li>Redirects- When viewing a note, JavaScript is used to redirect your browser after a timeout.</li>
+                    <li>Password Generation- To help you encrypt your note, an optional input field allows you to create a custom passphrase.</li>
+                </ul>
+                <p>There is no tracking code, such as analytics, cookies, etc.  in the <a href="https://github.com/atoponce/d-note">default source code</a>. If this site administrator has installed tracking code, I recommend installing the <a href="https://www.eff.org/privacybadger">Privacy Badger</a> and the <a href="https://adblockplus.org">Adblock Plus</a> extensions, which are both available for Google Chrome and Mozilla Firefox browsers.</p>
+            </noscript> 
         </div>
-        <div id="content">
-            {% block content %}{% endblock %}
-        </div>
-        <div id="footer"></div>
-        <noscript>
-           <p>You currently have JavaScript disabled. JavaScript is required to use this website. Here is all the JavaScript code that is executed:</p>
-            <ul>
-                <li><a href="http://hashcash.org">Hashcash</a>- Hashcash tokens are minted when submitting a note to prevent denial of service POST attacks and to prevent spamming.</li>
-                <li><a href="https://github.com/Valve/fingerprintjs">Fingerprinting</a>- As part of Hashcash tokens, an anonymous <a href="https://en.wikipedia.org/wiki/MurmurHash">MurmurHash</a> resource string is calculated.</li>
-                <li><a href="http://davidshimjs.github.io/qrcodejs/">QR Code Generation</a>- A QR Code is generated for sending to the recipient to scan using their mobile device to read the note.</li>
-                <li>Notifications- When posting a note, JavaScript is used to let you know that while you are posting your note, a Hashcash token is being minted.</li>
-                <li>Redirects- When viewing a note, JavaScript is used to redirect your browser after a timeout.</li>
-                <li>Password Generation- To help you encrypt your note, an optional input field allows you to create a custom passphrase.</li>
-            </ul>
-            <p>There is no tracking code, such as analytics, cookies, etc.  in the <a href="https://github.com/atoponce/d-note">default source code</a>. If this site administrator has installed tracking code, I recommend installing the <a href="https://www.eff.org/privacybadger">Privacy Badger</a> and the <a href="https://adblockplus.org">Adblock Plus</a> extensions, which are both available for Google Chrome and Mozilla Firefox browsers.</p>
-        </noscript> 
     </body>
 </html>
