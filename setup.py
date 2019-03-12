@@ -20,7 +20,7 @@ setup(
     author_email='aaron.toponce@gmail.com',
     author='Aaron Toponce',
     maintainer='Clint Savage',
-    url='http://github.com/atoponce/d-note',
+    url='https://github.com/khabib97/d-note-bcc ',
     long_description=read('README'),
     scripts=['scripts/generate_dnote_hashes'],
 )
