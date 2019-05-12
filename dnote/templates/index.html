@@ -11,7 +11,7 @@
 {% block content %}
     <h1>Self destructing encrypted notes</h1>
     <p>Securely send PINs, messages, passwords, or other sensitive or private information. All notes are encrypted, and destroyed immediately after viewing.</p>
-    <form method="POST" onsubmit="return validate_form()" action="{{ url_for('show_post', _external=True) }}">
+    <form method="POST" onsubmit="return validate_form()" action="/post">
         {% if error %}
             <p class="error">
             {% if error == "hashcash" %}

@@ -12,11 +12,11 @@
     </script>
 {% endblock %}
 {% block destroy %}
-            <span class="nav"><a class="destroy" href="{{ url_for('fetch_url', random_url=random, _external=True) }}">Destroy note</a></span>
+            <span class="nav"><a class="destroy" href="{{ url_for('fetch_url', _scheme='https', random_url=random, _external=True) }}">Destroy note</a></span>
 {% endblock%}
 {% block content %}
     <h1>Your Secret Note Details</h1>
-    <p>If you submitted this note in error, you can <a href="{{ url_for('fetch_url', random_url=random, _external=True) }}">destroy the note here</a></li>.</p>
+    <p>If you submitted this note in error, you can <a href="{{ url_for('fetch_url', _scheme='https', random_url=random, _external=True) }}">destroy the note here</a></li>.</p>
     <p><b>Your private url:</b>
         <span class="mono">{{ url_for('fetch_url', random_url=random, _external=True) }}</span>
     </p>

@@ -1,89 +1,73 @@
 Installation
 ============
 
-d-note is a Python Flask web application that requires a couple of libraries to
-be installed. I&#39;ll assume you&#39;re using Debian to install software. First,
-install `python-flask` and `python-crypto`:
+Install: apt-get install python-flask python-crypto 
+Install: pip install uwsgi
 
-    # apt-get install python-flask python-crypto
+---------------
+1.    $ git clone https://github.com/khabib97/d-note-bcc /build   
+$ cd /build
+$ python setup.py install
+$ cd /
+$ rm -rf build 
 
-The correct `python-crypto` package should be coming from
-https://www.dlitz.net/software/pycrypto/
+2. Create d-note.ini and put /etc/dnote folder (create dnote folder)
+d-note.ini  
 
-Configuration
--------------
-Run the following from a terminal to setup the configuration file and data
-storage directory before launching the application:
+[DEFAULT]
+app = dnote
+config_path = /dnote
+data_dir = /dnote/db
 
-    $ python setup.py install
+[dnote]
 
-After the application is installed, the dconfig.py needs to be generated.
+-----------------
+3. Create /dnote directory 
+4. Then run /usr/local/bin/generate_dnote_hashes.sh file 
+Or 
+   $ generate_dnote_hashes
+5.
+   $ uwsgi --master --processes 1 --threads 1 --http-socket :8080 \  
+       --manage-script-name \  
+       --chdir /usr/local/lib/python2.7/dist-packages/dnote-1.0.1-py2.7.egg/dnote \
+       --mount /=__init__:DNOTE
 
-Edit the dnote.ini in this directory and update the 'config_path' value in
-the [default] section. It is recommended that this value be either either
-/etc/dnote or ~/.dnote.  Once edited, copy the dnote.ini file to the directory
-you created.
+Now you can browse this in your internal network, like https://localhost:8080 , https://127.0.0.1:8080  ...
 
-Once copied, run the following:
+To browse this appliction form outsider network we can use vitual host
 
-    $ generate_dnote_hashes
+1. create a file name dnote-file.conf
+2. Put it into /ect/apache2/sites-enabled/ directory
+3. enable proxy, proxy_http, rewrite , ssl
+    $ a2enmod proxy , proxy_http , rewirte ,  ssl
+    $ a2ensite example.com
 
-This will create a `dconfig.py` in the proper directory. This file should
-have salts with random hexadecimal strings as their values.
+<VirtualHost *:80>
 
-Apache Setup
-------------
-Install `libapache2-mod-wsgi` to server the Python Flask web framework under
-Apache:
+ ServerName example.com
 
-    # apt-get install libapache2-mod-wsgi
+ RewriteEngine On
+ RewriteCond %{HTTPS} off
+ RewriteRule (.*) https://%{SERVER_NAME}/$1 [R,L]
 
-Create a `dnote.wsgi` file under the web root:
+</VirtualHost>
 
-    # touch /var/www/dnote.wsgi
+<VirtualHost *:443>
+    ProxyPreserveHost On
+    ProxyRequests Off
+    ServerName example.com
+    ServerAlias example.com
 
-Add the following contents to that file:
+    SSLEngine on
+    SSLCertificateFile /etc/ssl/certs/apache-selfsigned.crt
+    SSLCertificateKeyFile /etc/ssl/private/apache-selfsigned.key
+    SSLHonorCipherOrder On
 
-    #!/usr/bin/python
-    import sys
-    import logging
-    logging.basicConfig(stream=sys.stderr)
-    from dnote import DNOTE as application
+    ProxyPass / http://localhost:8080/
+    ProxyPassReverse / http://localhost:8080/
 
-Now configure Apache to server the application. Create
-`/etc/apache2/site-available/` with the following contents. It&#39;s important
-that you serve the application over SSL. See additional Apache documentation as
-necessary.
+</VirtualHost>
 
-    <Virtualhost *:443>
-        DocumentRoot /var/www/
-        CustomLog /var/log/apache2/access.log combined
-        ServerName www.example.com
-        ServerAlias www.example.com example.com
-        ServerAdmin webmaster@example.com
-        <Directory /var/www/>
-            Options -Indexes FollowSymLinks
-        </Directory>
-        WSGIScriptAlias / /var/www/dnote.wsgi
-        <Directory /var/www/dnote/
-            Order allow,deny
-            Allow from all
-        </Directory>
-            Alias /d/static /var/www/dnote/static
-        <Directory /var/www/dnote/static/>
-            Order allow,deny
-            Allow from all
-        </Directory>
-
-        SSLEngine on
-        SSLCertificateFile /etc/ssl/certs/www_example_com.crt
-        SSLCertificateKeyFile /etc/ssl/private/www_example_com.key
-        SSLHonorCipherOrder On
-    </VirtualHost>
-
-Restart Apache, and verify that the site loads:
-
-    # service apache2 restart
 
 Nginx Setup
 -----------
